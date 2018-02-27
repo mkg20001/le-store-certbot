@@ -27,7 +27,7 @@
     "bluebird": "^3.4.1",
     "fs-symlink": "^1.2.1",
     "mkdirp": "^0.5.1",
-    "pyconf": "^1.1.2",
-    "safe-replace": "^1.0.2"
+    "pyconf": "github:mkg20001/node-config-python",
+    "safe-replace": "github:mkg20001/node-safe-replace"
   }
 }
