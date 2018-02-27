@@ -8,14 +8,8 @@ var sfs = require('safe-replace')
 var os = require('os')
 var symlink = require('fs-symlink')
 
-function log (debug) {
-  if (debug) {
-    var args = Array.prototype.slice.call(arguments)
-    args.shift()
-    args.unshift('[le-store-certbot]')
-    console.log.apply(console, args)
-  }
-}
+const debug = require('debug')
+const log = debug('le-store-certbot')
 
 function writeRenewalConfig (args) {
   var pyobj = args.pyobj
@@ -32,7 +26,7 @@ function writeRenewalConfig (args) {
     // || args.domainPrivateKeyPath || args.domainKeyPath || pyobj.keyPath
     || path.join(liveDir, 'privkey.pem')
 
-  log(args.debug, 'writeRenewalConfig privkeyPath', privkeyPath)
+  log('writeRenewalConfig privkeyPath', privkeyPath)
 
   var updates = {
     account: args.account.id,
@@ -224,10 +218,7 @@ module.exports.create = function (configs) {
             */
           }
         }, function (err) {
-          if (args.debug) {
-            console.error('[le-store-certbot] certificates.check')
-            console.error(err.stack)
-          }
+          debug('certificates.check', err.stack)
           return null
         })
       },
@@ -280,16 +271,16 @@ module.exports.create = function (configs) {
             return writeRenewalConfig(args)
           }).then(function () {
             return {
-             privkey: pems.privkey,
-             cert: pems.cert,
-             chain: pems.chain
+              privkey: pems.privkey,
+              cert: pems.cert,
+              chain: pems.chain
 
               /*
               // TODO populate these only if they are actually known
             , issuedAt: Date.now()
             , expiresAt: Date.now() + (90 * 24 * 60 * 60 * 100)
               */
-           }
+            }
           })
         })
       }
@@ -324,11 +315,11 @@ module.exports.create = function (configs) {
         // TODO
         var email = args.email
         if (typeof email !== 'string') {
-          log(args.debug, 'No email given')
+          log('No email given')
           return PromiseA.resolve(null)
         }
         return fs.readdirAsync(args.accountsDir).then(function (nodes) {
-          log(args.debug, 'success reading arg.accountsDir')
+          log('success reading arg.accountsDir')
 
           return PromiseA.all(nodes.map(function (node) {
             return fs.readFileAsync(path.join(args.accountsDir, node, 'regr.json'), 'utf8').then(function (text) {
@@ -340,7 +331,7 @@ module.exports.create = function (configs) {
           })).then(function (regrs) {
             var accountId
 
-            log(args.debug, 'regrs.length', regrs.length)
+            log('regrs.length', regrs.length)
 
             regrs.some(function (regr) {
               return regr.body.contact.some(function (contact) {
@@ -416,7 +407,7 @@ module.exports.create = function (configs) {
         }
 
         return promise.then(function (_accountId) {
-          log(args.debug, 'accountId:', _accountId)
+          log('accountId:', _accountId)
           if (!_accountId) {
             return false
           }
@@ -441,7 +432,7 @@ module.exports.create = function (configs) {
 
               return true
             }, function (err) {
-              log(args.debug, 'Error reading account files:', err)
+              log('Error reading account files:', err)
               files[keyname] = { error: err }
             })
           }))

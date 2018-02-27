@@ -25,6 +25,7 @@
   "homepage": "https://git.daplie.com/Daplie/le-store-certbot#readme",
   "dependencies": {
     "bluebird": "^3.4.1",
+    "debug": "^3.1.0",
     "fs-symlink": "^1.2.1",
     "mkdirp": "^0.5.1",
     "pyconf": "github:mkg20001/node-config-python",

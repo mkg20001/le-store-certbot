@@ -42,8 +42,6 @@ var leStore = require('le-store-certbot').create({
 , logsDir: require('homedir')() + '/letsencrypt/var/log'
 
 , webrootPath: '~/letsencrypt/srv/www/:hostname/.well-known/acme-challenge'
-
-, debug: false
 });
 
 var LE = require('letsencrypt');
